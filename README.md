@@ -1,9 +1,9 @@
 # Mission Control – Umbrella Repository
 
-To repozytorium zbiera w jednym miejscu wszystkie komponenty systemu Mission Control
-jako submoduły Gita (tzw. *umbrella repo*).
+This repository groups all Mission Control components in one place
+using Git submodules (an *umbrella repo* / monorepo-style setup).
 
-Struktura katalogów (przykładowa):
+Directory structure (example):
 
 ```text
 mission_control/
@@ -13,124 +13,127 @@ mission_control/
 └─ ui/        → https://github.com/AGH-Skylink/mission_control_ui
 ```
 
-Każdy katalog jest **osobnym repozytorium** (submodule), ze swoją historią, remote’em
-i workflowem. Umbrella repo tylko „zapamiętuje”, jaki commit każdego submodułu
-jest używany w danej wersji całego systemu.
+Each subdirectory is a **separate Git repository** (submodule) with its own history,
+remote and workflow. The umbrella repo only remembers **which commit** of each
+submodule is used in a given version of the whole system.
 
 ---
 
-## 1. Pierwsza instalacja (dla nowych osób w projekcie)
+## 1. First-time setup (for new team members)
 
-### 1.1. Wymagania
+### 1.1. Requirements
 
-- Git (zalecana konfiguracja z kluczem SSH do GitHuba)
-- Python / Node / itd. – zgodnie z README w poszczególnych modułach
+- Git (ideally configured with an SSH key for GitHub)
+- Runtime dependencies (Python / Node / etc.) – see README in each submodule
 
-### 1.2. Klonowanie całego systemu (rekomendowane)
+### 1.2. Cloning the whole system (recommended)
 
 ```bash
 git clone --recurse-submodules https://github.com/AGH-Skylink/mission_control.git
 cd mission_control
 ```
 
-Flaga `--recurse-submodules` od razu dociąga zawartość `manager/`, `audio/`, `server/` i `ui/`.
+The `--recurse-submodules` flag automatically fetches the contents of `manager/`,
+`audio/`, `server/` and `ui/` at the correct commits.
 
-### 1.3. Jeśli ktoś już sklonował repo bez submodułów
+### 1.3. If you already cloned without submodules
 
-Jeżeli ktoś zrobił zwykłe:
+If someone ran a plain:
 
 ```bash
 git clone https://github.com/AGH-Skylink/mission_control.git
 ```
 
-to potem wystarczy:
+then later they can do:
 
 ```bash
 cd mission_control
 git submodule update --init --recursive
 ```
 
-Ta komenda:
+This command:
 
-- inicjuje submoduły,
-- pobiera ich zawartość na commit wskazany przez umbrella repo.
+- initializes all submodules,
+- checks them out at the commits recorded in the umbrella repo.
 
 ---
 
-## 2. Praca nad konkretnym projektem (submodule)
+## 2. Working on a specific project (submodule)
 
-Każdy submodule to normalne repo Gita. Przykład dla **UI**.
+Each submodule is a normal Git repo. Example for the **UI** project.
 
-### 2.1. Wchodzenie do modułu i praca jak zwykle
+### 2.1. Enter the submodule and work as usual
 
 ```bash
 cd mission_control/ui
 
-# normalne operacje
+# standard Git workflow
 git status
 git add .
-git commit -m "Opis zmian"
+git commit -m "Describe your changes"
 git push
 ```
 
-Repozytorium `ui/` nadal ma swój własny remote na GitHubie
-(`AGH-Skylink/mission_control_ui`), więc pushujesz tam jak zawsze.
+The `ui/` repository keeps its own remote on GitHub
+(`AGH-Skylink/mission_control_ui`), so you push there as usual.
 
-### 2.2. Aktualizacja refa submodułu w umbrella repo
+### 2.2. Update the submodule reference in the umbrella repo
 
-Po zmianach w submodule (np. `ui/`):
+After committing and pushing changes in a submodule (e.g. `ui/`):
 
 ```bash
 cd mission_control/ui
-# ... commit/push ...
+# ... commit & push your work ...
 
-cd ..                  # wracamy do umbrella
-git status             # zobaczysz, że katalog ui ma zmieniony commit
+cd ..                  # go back to umbrella repo root
+git status             # you'll see that 'ui' points to a new commit
 git add ui
 git commit -m "Update ui submodule to latest"
 git push
 ```
 
-Umbrella zapisze:  
-> „W wersji X całego systemu, `ui` jest na commicie Y”.
+The umbrella repo now records:
 
-To samo dotyczy `manager/`, `audio/`, `server/`.
+> “In version X of the overall system, `ui` is at commit Y”.
+
+Exactly the same rules apply to `manager/`, `audio/` and `server/`.
 
 ---
 
-## 3. Odświeżanie submodułów do najnowszych commitów
+## 3. Updating submodules to the latest recorded commits
 
-Jeśli ktoś inny zaktualizował submoduły i zrobił `git push` w umbrella repo:
+If someone else updated submodules and pushed the umbrella repo:
 
 ```bash
 git pull
 git submodule update --init --recursive
 ```
 
-Dzięki temu wszystkie moduły wskoczą na commity zapisane w aktualnym stanie umbrella.
+This will move all local submodules to the commits recorded in the current state
+of the umbrella repository.
 
 ---
 
-## 4. Krótki workflow „end-to-end”
+## 4. Example end-to-end workflow
 
-1. **Pobierasz cały projekt**:
+1. **Clone the entire project**:
 
    ```bash
    git clone --recurse-submodules git@github.com:AGH-Skylink/mission_control.git
    cd mission_control
    ```
 
-2. **Pracujesz w swoim module** (np. audio):
+2. **Work in your submodule** (example: `audio`):
 
    ```bash
    cd audio
    git checkout -b feature/new-magic
-   # ... kod ...
+   # ... implement stuff ...
    git commit -m "Add new magic"
    git push
    ```
 
-3. **Aktualizujesz umbrella**:
+3. **Update the umbrella repo**:
 
    ```bash
    cd ..
@@ -139,62 +142,64 @@ Dzięki temu wszystkie moduły wskoczą na commity zapisane w aktualnym stanie u
    git push
    ```
 
-4. Inne osoby robią:
+4. Other people then run:
 
    ```bash
    git pull
    git submodule update --init --recursive
    ```
 
-i mają tę samą wersję wszystkich modułów.
+and they get the same versions of all components.
 
 ---
 
-## 5. Przydatne komendy podsumowane
+## 5. Useful Git commands (cheat sheet)
 
-- Klonowanie z submodułami:
+- Clone umbrella + all submodules:
 
   ```bash
   git clone --recurse-submodules https://github.com/AGH-Skylink/mission_control.git
   ```
 
-- Inicjalizacja / aktualizacja submodułów:
+- Initialize / update submodules:
 
   ```bash
   git submodule update --init --recursive
   ```
 
-- Wejście do modułu i praca jak w normalnym repo:
+- Enter a module and work like in a normal repo:
 
   ```bash
-  cd ui          # lub manager / audio / server
+  cd ui          # or manager / audio / server
   git status
   git add .
   git commit -m "..."
   git push
   ```
 
-- Zapisanie nowej wersji submodułu w umbrella:
+- Record a new submodule version in the umbrella:
 
   ```bash
   cd ..
-  git add ui     # lub manager / audio / server
+  git add ui     # or manager / audio / server
   git commit -m "Update ui submodule"
   git push
   ```
 
 ---
 
-Jeżeli ktoś się gubi w submodułach – najważniejsze zasady:
+## 6. Mental model – how to think about submodules
 
-1. **Każdy folder (manager, audio, server, ui) to osobne repo Gita.**
-2. Zawsze najpierw:
-   - commit + push w submodule,
-   - dopiero potem commit + push w umbrella repo.
-3. Po `git pull` w umbrella **zawsze** warto zrobić:
+If submodules feel confusing, keep these three rules in mind:
+
+1. **Each folder (`manager`, `audio`, `server`, `ui`) is a separate Git repo.**
+2. When you change code inside a submodule:
+   - commit & push inside that submodule first,
+   - *then* commit & push the updated submodule reference in the umbrella repo.
+3. After `git pull` in the umbrella repo, always run:
 
    ```bash
    git submodule update --init --recursive
    ```
 
-   żeby lokalne submoduły wskoczyły na właściwe commity.
+   so that your local submodules move to the correct commits recorded by the umbrella.
