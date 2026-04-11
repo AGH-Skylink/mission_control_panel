@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="PYTHON_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$/audio">
+      <sourceFolder url="file://$MODULE_DIR$/audio" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/manager">
+      <sourceFolder url="file://$MODULE_DIR$/manager" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/server">
+      <sourceFolder url="file://$MODULE_DIR$/server" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/ui">
+      <sourceFolder url="file://$MODULE_DIR$/ui" isTestSource="false" />
+    </content>
+    <orderEntry type="jdk" jdkName="Python 3.14 (mission_control_panel)" jdkType="Python SDK" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+  <component name="PyDocumentationSettings">
+    <option name="format" value="PLAIN" />
+    <option name="myDocStringFormat" value="Plain" />
+  </component>
+</module>
