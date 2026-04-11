@@ -1,12 +1,12 @@
 [submodule "manager"]
 	path = manager
-	url = https://github.com/AGH-Skylink/mission_control_manager.git
+	url = git@github.com:AGH-Skylink/mission_control_manager.git
 [submodule "audio"]
 	path = audio
-	url = https://github.com/AGH-Skylink/mission_control_audio.git
+	url = git@github.com:AGH-Skylink/mission_control_audio.git
 [submodule "ui"]
 	path = ui
-	url = https://github.com/AGH-Skylink/mission_control_ui.git
+	url = git@github.com:AGH-Skylink/mission_control_ui.git
 [submodule "server"]
 	path = server
-	url = https://github.com/AGH-Skylink/mission_control_server.git
+	url = git@github.com:AGH-Skylink/mission_control_server.git
